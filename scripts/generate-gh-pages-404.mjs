@@ -12,9 +12,10 @@ const output404Path = path.join(docsDir, '404.html')
 const html = await readFile(builtIndexPath, 'utf8')
 const redirectSnippet = `
 <script>
-  sessionStorage.redirect = location.href;
+  const path = window.location.pathname + window.location.search + window.location.hash
+  sessionStorage.setItem('redirect', window.location.origin + path)
 </script>
-<meta http-equiv="refresh" content="0;URL='/'">
+<meta http-equiv="refresh" content="0;url=/">
 `
 
 await mkdir(docsDir, { recursive: true })

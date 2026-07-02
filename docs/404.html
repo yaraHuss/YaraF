@@ -53,18 +53,19 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DcnI2RvM.css">
   
 <script>
-  sessionStorage.redirect = location.href;
+  const path = window.location.pathname + window.location.search + window.location.hash
+  sessionStorage.setItem('redirect', window.location.origin + path)
 </script>
-<meta http-equiv="refresh" content="0;URL='/'">
+<meta http-equiv="refresh" content="0;url=/">
 </head>
   <body>
     <div id="root"></div>
     <script>
       (function () {
         const redirect = sessionStorage.getItem('redirect')
-        delete sessionStorage.redirect
+        sessionStorage.removeItem('redirect')
 
-        if (redirect && redirect !== window.location.href) {
+        if (redirect) {
           const redirectUrl = new URL(redirect)
           const normalizedPath = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash
           if (normalizedPath && normalizedPath !== window.location.pathname + window.location.search + window.location.hash) {

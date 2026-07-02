@@ -57,9 +57,9 @@
     <script>
       (function () {
         const redirect = sessionStorage.getItem('redirect')
-        delete sessionStorage.redirect
+        sessionStorage.removeItem('redirect')
 
-        if (redirect && redirect !== window.location.href) {
+        if (redirect) {
           const redirectUrl = new URL(redirect)
           const normalizedPath = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash
           if (normalizedPath && normalizedPath !== window.location.pathname + window.location.search + window.location.hash) {
