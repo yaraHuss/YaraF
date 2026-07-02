@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 function loadEnv() {
-  const envFiles = ['.env.local', '.env']
+  const envFiles = ['.env.local', '.env', '.env.example']
   const env = {}
 
   for (const file of envFiles) {
@@ -16,7 +16,11 @@ function loadEnv() {
       for (const line of content.split(/\r?\n/)) {
         const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/)
         if (match) {
-          env[match[1]] = match[2].replace(/^['"]|['"]$/g, '')
+          const key = match[1]
+          const value = match[2].replace(/^['"]|['"]$/g, '')
+          if (!env[key] && value) {
+            env[key] = value
+          }
         }
       }
     } catch {
@@ -27,14 +31,18 @@ function loadEnv() {
   return env
 }
 
+function resolveConfigValue(key, fallback = '') {
+  return process.env[key] || env[key] || fallback
+}
+
 const env = loadEnv()
-const PORT = Number(process.env.PORT || env.PORT || 3001)
-const ZOHO_CLIENT_ID = process.env.ZOHO_CLIENT_ID || env.ZOHO_CLIENT_ID
-const ZOHO_CLIENT_SECRET = process.env.ZOHO_CLIENT_SECRET || env.ZOHO_CLIENT_SECRET
-const ZOHO_SCOPE = process.env.ZOHO_SCOPE || env.ZOHO_SCOPE || 'ZohoCRM.modules.ALL'
-const ZOHO_ACCOUNT_URL = process.env.ZOHO_ACCOUNT_URL || env.ZOHO_ACCOUNT_URL || 'https://accounts.zoho.com'
-const ZOHO_REDIRECT_URI = process.env.ZOHO_REDIRECT_URI || env.ZOHO_REDIRECT_URI || `http://localhost:${PORT}/oauth/callback`
-const ZOHO_TOKEN_STORE_PATH = process.env.ZOHO_REFRESH_TOKEN_PATH || env.ZOHO_REFRESH_TOKEN_PATH || path.join(__dirname, '.zoho-tokens.json')
+const PORT = Number(resolveConfigValue('PORT', '3001'))
+const ZOHO_CLIENT_ID = resolveConfigValue('ZOHO_CLIENT_ID')
+const ZOHO_CLIENT_SECRET = resolveConfigValue('ZOHO_CLIENT_SECRET')
+const ZOHO_SCOPE = resolveConfigValue('ZOHO_SCOPE', 'ZohoCRM.modules.ALL')
+const ZOHO_ACCOUNT_URL = resolveConfigValue('ZOHO_ACCOUNT_URL', 'https://accounts.zoho.com')
+const ZOHO_REDIRECT_URI = resolveConfigValue('ZOHO_REDIRECT_URI', `http://localhost:${PORT}/oauth/callback`)
+const ZOHO_TOKEN_STORE_PATH = resolveConfigValue('ZOHO_REFRESH_TOKEN_PATH', path.join(__dirname, '.zoho-tokens.json'))
 
 let tokenStore = readTokenStore()
 
@@ -42,7 +50,7 @@ function readTokenStore() {
   if (!existsSync(ZOHO_TOKEN_STORE_PATH)) {
     return {
       accessToken: '',
-      refreshToken: process.env.ZOHO_REFRESH_TOKEN || env.ZOHO_REFRESH_TOKEN || '',
+      refreshToken: resolveConfigValue('ZOHO_REFRESH_TOKEN', ''),
       expiresAt: 0,
     }
   }
@@ -52,7 +60,7 @@ function readTokenStore() {
   } catch {
     return {
       accessToken: '',
-      refreshToken: process.env.ZOHO_REFRESH_TOKEN || env.ZOHO_REFRESH_TOKEN || '',
+      refreshToken: resolveConfigValue('ZOHO_REFRESH_TOKEN', ''),
       expiresAt: 0,
     }
   }
@@ -118,7 +126,7 @@ async function refreshZohoAccessToken() {
     throw new Error('Zoho client credentials are not configured')
   }
 
-  const refreshToken = tokenStore.refreshToken || process.env.ZOHO_REFRESH_TOKEN || env.ZOHO_REFRESH_TOKEN
+  const refreshToken = tokenStore.refreshToken || resolveConfigValue('ZOHO_REFRESH_TOKEN', '')
   if (!refreshToken) {
     throw new Error('No Zoho refresh token found. Visit /oauth/authorize to connect your account.')
   }
