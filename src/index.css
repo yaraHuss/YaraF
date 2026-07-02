@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --color-ink: #070A10;
+  --color-navy: #0E1626;
+  --color-navy2: #131D33;
+  --color-electric: #2F6FED;
+  --color-cyan: #22D3EE;
+  --color-mist: #8B96AB;
+  --color-offwhite: #E9EDF5;
+  --bg: var(--color-ink);
+  --text: var(--color-offwhite);
+}
+
+html.light {
+  color-scheme: light;
+  --color-ink: #F8FAFC;
+  --color-navy: #E2E8F0;
+  --color-navy2: #CBD5E1;
+  --color-electric: #2563EB;
+  --color-cyan: #0EA5E9;
+  --color-mist: #475569;
+  --color-offwhite: #0F172A;
+  --bg: var(--color-ink);
+  --text: var(--color-offwhite);
+}
+
+html.dark {
+  color-scheme: dark;
+  --color-ink: #070A10;
+  --color-navy: #0E1626;
+  --color-navy2: #131D33;
+  --color-electric: #2F6FED;
+  --color-cyan: #22D3EE;
+  --color-mist: #8B96AB;
+  --color-offwhite: #E9EDF5;
+  --bg: var(--color-ink);
+  --text: var(--color-offwhite);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.35;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.3);
+}
+
+/* visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #22D3EE;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbar for the mobile bottom nav safe area spacer */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
