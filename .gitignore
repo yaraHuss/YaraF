@@ -2,6 +2,7 @@ node_modules
 dist
 .env
 .env.local
+.zoho-tokens.json
 functions/lib
 functions/node_modules
 .DS_Store
