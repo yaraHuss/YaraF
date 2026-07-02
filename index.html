@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#070A10" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';" />
 
     <title>YARAF Digital | AI Automation & Enterprise Transformation</title>
     <meta name="description" content="YARAF Digital helps UAE and GCC businesses automate workflows, customer support, and internal operations with enterprise-grade AI systems." />
@@ -52,20 +53,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      (function () {
-        const redirect = sessionStorage.getItem('redirect')
-        sessionStorage.removeItem('redirect')
 
-        if (redirect) {
-          const redirectUrl = new URL(redirect, window.location.origin)
-          const hashTarget = redirectUrl.hash ? redirectUrl.hash.slice(1) : redirectUrl.pathname + redirectUrl.search
-          if (hashTarget && hashTarget !== window.location.hash.slice(1)) {
-            window.history.replaceState(null, '', '/#' + hashTarget)
-          }
-        }
-      })()
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

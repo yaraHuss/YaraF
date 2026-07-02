@@ -14,7 +14,6 @@ const redirectSnippet = `
 <script>
   const path = window.location.pathname + window.location.search + window.location.hash
   const safePath = path && path !== '/' ? '/#' + path.replace(/^\/+/, '') : '/#/'
-  sessionStorage.setItem('redirect', window.location.origin + path)
   window.location.replace(safePath)
 </script>
 `
