@@ -52,6 +52,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      (function () {
+        const redirect = sessionStorage.getItem('redirect')
+        delete sessionStorage.redirect
+
+        if (redirect && redirect !== window.location.href) {
+          const redirectUrl = new URL(redirect)
+          const normalizedPath = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash
+          if (normalizedPath && normalizedPath !== window.location.pathname + window.location.search + window.location.hash) {
+            window.history.replaceState(null, '', normalizedPath)
+          }
+        }
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
