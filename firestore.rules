@@ -1,9 +1,0 @@
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /leads/{leadId} {
-      allow create: if request.resource.data.keys().hasAll(['name', 'email']);
-      allow read, update, delete: if false; // only accessible via Firebase Console / Admin SDK
-    }
-  }
-}

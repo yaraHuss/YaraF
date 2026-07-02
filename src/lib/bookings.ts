@@ -1,6 +1,3 @@
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { db } from './firebase'
-
 export interface BookingRequest {
   name: string
   email: string
@@ -12,10 +9,19 @@ export interface BookingRequest {
 }
 
 export async function submitBooking(data: BookingRequest) {
-  const bookingsRef = collection(db, 'bookings')
-  return addDoc(bookingsRef, {
-    ...data,
-    createdAt: serverTimestamp(),
-    status: 'pending',
-  })
+  const subject = encodeURIComponent(`YARAF booking request from ${data.name}`)
+  const body = encodeURIComponent(
+    [
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Service: ${data.service}`,
+      `Date: ${data.date}`,
+      `Time: ${data.timeSlot}`,
+      '',
+      data.message,
+    ].join('\n')
+  )
+
+  window.location.href = `mailto:hello@yarafdigital.com?subject=${subject}&body=${body}`
 }

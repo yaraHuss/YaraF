@@ -1,6 +1,3 @@
-import { getFunctions, httpsCallable } from 'firebase/functions'
-import app from './firebase'
-
 export interface LeadFormData {
   name: string
   company: string
@@ -11,11 +8,22 @@ export interface LeadFormData {
 }
 
 /**
- * Sends the lead/consultation request to the Firebase backend, which stores it in Firestore
- * and forwards it to Zoho CRM when possible.
+ * Provides a simple front-end fallback for the contact form.
+ * The form now opens the user's email client with the details prepared.
  */
 export async function submitLead(data: LeadFormData) {
-  const functions = getFunctions(app)
-  const submitLeadFn = httpsCallable(functions, 'submitLead')
-  return submitLeadFn(data)
+  const subject = encodeURIComponent(`YARAF inquiry from ${data.name}`)
+  const body = encodeURIComponent(
+    [
+      `Name: ${data.name}`,
+      `Company: ${data.company}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Service: ${data.service}`,
+      '',
+      data.message,
+    ].join('\n')
+  )
+
+  window.location.href = `mailto:hello@yarafdigital.com?subject=${subject}&body=${body}`
 }
