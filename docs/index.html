@@ -49,7 +49,7 @@
         "sameAs": []
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-BhruiVTM.js"></script>
+    <script type="module" crossorigin src="/assets/index-DKluyM8C.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-DcnI2RvM.css">
   </head>
   <body>
@@ -60,10 +60,10 @@
         sessionStorage.removeItem('redirect')
 
         if (redirect) {
-          const redirectUrl = new URL(redirect)
-          const normalizedPath = redirectUrl.pathname + redirectUrl.search + redirectUrl.hash
-          if (normalizedPath && normalizedPath !== window.location.pathname + window.location.search + window.location.hash) {
-            window.history.replaceState(null, '', normalizedPath)
+          const redirectUrl = new URL(redirect, window.location.origin)
+          const hashTarget = redirectUrl.hash ? redirectUrl.hash.slice(1) : redirectUrl.pathname + redirectUrl.search
+          if (hashTarget && hashTarget !== window.location.hash.slice(1)) {
+            window.history.replaceState(null, '', '/#' + hashTarget)
           }
         }
       })()
